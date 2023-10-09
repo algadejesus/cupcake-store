@@ -1,5 +1,50 @@
 version: "3.1"
+
+x-common-variables: &common-variables
+  POSTGRES_DB: cupcakes
+  POSTGRES_USER: cupcakes
+  POSTGRES_PASSWORD: cupcakes
+  POSTGRES_PORT: 5432
+  POSTGRES_HOST: "db_cupcakes"
+
 services:
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: admin_cupcakes
+    restart: always
+    ports:
+      - 8000:80
+    volumes:
+      - ./.docker/metabase-data:/metabase-data
+    environment:
+      PGADMIN_DEFAULT_EMAIL: cupcakes.store@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: cupcakes
+    depends_on:
+      - postgres
+    links:
+      - postgres
+    networks:
+      - cupcakes-store
+
+  postgres:
+    image: postgres:10.7
+    container_name: db_cupcakes
+    restart: always
+    environment:
+      <<: *common-variables
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+      # - ./scriptSQL/cupcakes_store.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - cupcakes-store
+
+volumes:
+  dbdata:
+
+networks:
+  cupcakes-store:
+
   # mailhog:
   #   image: mailhog/mailhog:latest
   #   restart: always
@@ -17,48 +62,6 @@ services:
   #     - mongo
   #   links:
   #     - mongo
-
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: admin_cupcakes
-    restart: always
-    ports:
-      - 8000:80
-    volumes:
-      - ./.docker/metabase-data:/metabase-data
-    environment:
-      PGADMIN_DEFAULT_EMAIL: agladejesus@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: cupcakes
-    depends_on:
-      - postgres
-    links:
-      - postgres
-    networks:
-      - cupcakes-store
-
-  postgres:
-    image: postgres:10.7
-    container_name: db_cupcakes
-    restart: always
-    ports:
-      - 5432:5432
-    environment:
-      POSTGRES_DB: cupcakes
-      POSTGRES_USER: cupcakes
-      POSTGRES_PASSWORD: cupcakes
-      POSTGRES_HOST: "db_cupcakes"
-      PGDATA: /var/lib/postgresql/data
-    volumes:
-      - ./.docker/pgdata:/var/lib/postgresql/data
-    networks:
-      - cupcakes-store
-
-volumes:
-  pgdata:
-
-networks:
-  cupcakes-store:
-    driver: bridge
 
   # mongo:
   #   image: mongo

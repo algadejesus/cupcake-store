@@ -1,12 +1,12 @@
 module.exports = {
   dialect: "postgres",
-  host: "localhost",
+  host: "172.25.0.2",
   username: "cupcakes",
-  password: "secret",
+  password: "cupcakes",
   database: "cupcakes",
   define: {
-    timestamp: true, // cria duas colunas: createdAt e updatedAt
+    timestamp: true,
     underscored: true,
     underscoredAll: true,
-  },
-};
+  }
+}

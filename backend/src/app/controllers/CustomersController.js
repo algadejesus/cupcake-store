@@ -1,5 +1,3 @@
-import Customer from "../models/Customer";
-
 const customers = [
   { id: 1, name: "Dev Samurai", site: "http://devsamurai.com.br" },
   { id: 2, name: "Google", site: "http://google.com" },
@@ -9,12 +7,7 @@ const customers = [
 class CustomersController {
   // Listagem dos Customers
   index(req, res) {
-    try {
-      const data = Customer.findAll({});
-      return res.json(data);
-    } catch (error) {
-      return res.status(500).json({ error: "Erro ao buscar os clientes." });
-    }
+    return res.json(customers);
   }
 
   // Recupera um Customer

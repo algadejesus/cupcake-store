@@ -1,0 +1,83 @@
+version: "3.1"
+services:
+  # mailhog:
+  #   image: mailhog/mailhog:latest
+  #   restart: always
+  #   ports:
+  #     - 8002:8025
+  #     - 1025:1025
+
+  # adminmongo:
+  #   image: mrvautin/adminmongo
+  #   ports:
+  #     - 8001:1234
+  #   environment:
+  #     - HOST=0.0.0.0
+  #   depends_on:
+  #     - mongo
+  #   links:
+  #     - mongo
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: admin_cupcakes
+    restart: always
+    ports:
+      - 8000:80
+    volumes:
+      - ./.docker/metabase-data:/metabase-data
+    environment:
+      PGADMIN_DEFAULT_EMAIL: agladejesus@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: cupcakes
+    depends_on:
+      - postgres
+    links:
+      - postgres
+    networks:
+      - cupcakes-store
+
+  postgres:
+    image: postgres:10.7
+    container_name: db_cupcakes
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: cupcakes
+      POSTGRES_USER: cupcakes
+      POSTGRES_PASSWORD: cupcakes
+      POSTGRES_HOST: "db_cupcakes"
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - ./.docker/pgdata:/var/lib/postgresql/data
+    networks:
+      - cupcakes-store
+
+volumes:
+  pgdata:
+
+networks:
+  cupcakes-store:
+    driver: bridge
+
+  # mongo:
+  #   image: mongo
+  #   environment:
+  #     - MONGO_INITDB_ROOT_USERNAME=root
+  #     - MONGO_INITDB_ROOT_PASSWORD=secret
+  #     - MONGODB_USER=mongo
+  #     - MONGODB_PASS=secret
+  #     - MONGO_DATA_DIR=/data/db
+  #     - MONGO_LOG_DIR=/dev/null
+  #   volumes:
+  #     - ./.docker/mongodb:/data/db
+  #   ports:
+  #     - 27017:27017
+
+  # redis:
+  #   image: redis
+  #   restart: always
+  #   ports:
+  #     - 6379:6379
+  #   volumes:
+  #     - ./.docker/redis:/data

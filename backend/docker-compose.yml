@@ -1,4 +1,4 @@
-version: "3.1"
+version: "2.2"
 
 x-common-variables: &common-variables
   POSTGRES_DB: cupcakes

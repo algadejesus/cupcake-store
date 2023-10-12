@@ -1,9 +1,8 @@
+const api = require('./api');
+const localStorage = require('localStorage')
 const express = require('express');
-
 const server = express();
-
 server.use(express.json());
-
 server.listen(3000);
 
 server.get('/first', (req, res) => {
@@ -24,7 +23,7 @@ server.post('/produtos', (req, res) => {
     produtos.push({id: id, name: name, price: price});
 
     res.send({message: 'Success!'});
-})
+});
 
 server.get('/produtos', (req, res) => {
     res.send({Produto: produtos})
@@ -50,4 +49,44 @@ server.delete('/produtos/:id', (req, res) => {
     produtos = newProdutos;
 
     res.send({Produtos: produtos});
+});
+
+server.get('/pokemon', async (req, res) => {
+
+    try {
+        const {data} = await api.get('pokemon2/1')
+        return res.send({name: data.name});
+
+    } catch (error) {
+        res.send({error: error.message})
+    }
+});
+
+function verifyUserAlready(req, res, next) {
+    const { email } = req.body;
+
+    if (!allUsers.find(user => user.email === email)) {
+        return next();
+    }
+
+    return res.status(400).json({Failed: 'This is email already registed'});
+}
+
+
+const allUsers = [];
+
+server.post('/register-users', verifyUserAlready, (req, res) => {
+    const user = req.body;
+
+    allUsers.push(user);
+
+    localStorage.setItem('users', JSON.stringify(allUsers));
+
+    return res.json({user});
+});
+
+server.get('/users', (req, res) => {
+    const users = JSON.parse(localStorage.getItem('users'));
+
+    return res.json(users)
 })

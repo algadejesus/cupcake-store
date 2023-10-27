@@ -1,0 +1,68 @@
+version: '2.2'
+
+services:
+  front:
+    container_name: 'front-cupcakes'
+    restart: always
+    volumes:
+      - ./../frontend:/usr/src/api
+    depends_on:
+      - db
+    ports:
+      - 3000:3000
+    build:
+      context: .
+      dockerfile: ./front/Dockerfile
+    networks:
+      - cupcakes-ntw
+
+  back:
+    container_name: 'back-cupcakes'
+    restart: always
+    volumes:
+      - ./../backend:/usr/src/api
+    depends_on:
+      - db
+    ports:
+      - 3002:3002
+    build:
+      context: .
+      dockerfile: ./back/Dockerfile
+    networks:
+      - cupcakes-ntw
+    
+  db:
+    container_name: 'db-cupcakes'
+    restart: always
+    volumes:
+      - ../backend/MySQL/MySQL_Script.sql:/docker-entrypoint-initdb.d/init.sql
+    build:
+      context: .
+      dockerfile: ./mysql/Dockerfile
+    ports:
+      - 3306
+    networks:
+      - cupcakes-ntw
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin-cupcakes
+    restart: always
+    links:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+      MYSQL_ROOT_PASSWORD: pipoca123
+    ports:
+      - 3003:80
+    networks:
+      - cupcakes-ntw
+
+networks:
+  cupcakes-ntw:
+    driver: bridge
+
+volumes:
+  dbdata:

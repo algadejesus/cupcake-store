@@ -37,13 +37,6 @@ module.exports = function(sequelize, DataTypes) {
           { name: "usuario_id" },
         ]
       },
-      {
-        name: "fk_Cliente_Usuario1_idx",
-        using: "BTREE",
-        fields: [
-          { name: "usuario_id" },
-        ]
-      },
     ]
   });
 };

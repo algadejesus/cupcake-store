@@ -1,26 +1,28 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Itens_de_Produto', {
+  return sequelize.define('Pedido_has_Produto', {
     idItensProduto: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    pedido_id: {
+    Produto_idProduto: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      references: {
-        model: 'Pedido',
-        key: 'idPedido'
-      }
-    },
-    produto_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
+      primaryKey: true,
       references: {
         model: 'Produto',
         key: 'idProduto'
+      }
+    },
+    Pedido_idPedido: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      references: {
+        model: 'Pedido',
+        key: 'idPedido'
       }
     },
     quantidade: {
@@ -33,7 +35,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'Itens_de_Produto',
+    tableName: 'Pedido_has_Produto',
     timestamps: false,
     indexes: [
       {
@@ -42,20 +44,22 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "idItensProduto" },
+          { name: "Produto_idProduto" },
+          { name: "Pedido_idPedido" },
         ]
       },
       {
-        name: "fk_Itens_de_Produto_Pedido1_idx",
+        name: "fk_Pedido_has_Produto_Produto1_idx",
         using: "BTREE",
         fields: [
-          { name: "pedido_id" },
+          { name: "Produto_idProduto" },
         ]
       },
       {
-        name: "fk_Itens_de_Produto_Produto1_idx",
+        name: "fk_Pedido_has_Produto_Pedido1_idx",
         using: "BTREE",
         fields: [
-          { name: "produto_id" },
+          { name: "Pedido_idPedido" },
         ]
       },
     ]

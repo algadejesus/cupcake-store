@@ -20,22 +20,6 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(255),
       allowNull: false
     },
-    endereco_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'Endereco',
-        key: 'idEndereco'
-      }
-    },
-    telefone_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'Telefone',
-        key: 'idTelefone'
-      }
-    },
     sexo: {
       type: DataTypes.STRING(10),
       allowNull: false
@@ -76,20 +60,6 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "cpf" },
-        ]
-      },
-      {
-        name: "fk_Usuario_Endereco1_idx",
-        using: "BTREE",
-        fields: [
-          { name: "endereco_id" },
-        ]
-      },
-      {
-        name: "fk_Usuario_Telefone1_idx",
-        using: "BTREE",
-        fields: [
-          { name: "telefone_id" },
         ]
       },
     ]

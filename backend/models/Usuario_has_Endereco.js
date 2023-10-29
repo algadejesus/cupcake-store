@@ -1,16 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Telefone', {
-    idTelefone: {
-      autoIncrement: true,
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true
-    },
-    numero: {
-      type: DataTypes.STRING(20),
-      allowNull: false
-    },
+  return sequelize.define('Usuario_has_Endereco', {
     Usuario_idUsuario: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -19,10 +9,19 @@ module.exports = function(sequelize, DataTypes) {
         model: 'Usuario',
         key: 'idUsuario'
       }
+    },
+    Endereco_idEndereco: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      references: {
+        model: 'Endereco',
+        key: 'idEndereco'
+      }
     }
   }, {
     sequelize,
-    tableName: 'Telefone',
+    tableName: 'Usuario_has_Endereco',
     timestamps: false,
     indexes: [
       {
@@ -30,12 +29,19 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "idTelefone" },
           { name: "Usuario_idUsuario" },
+          { name: "Endereco_idEndereco" },
         ]
       },
       {
-        name: "fk_Telefone_Usuario1_idx",
+        name: "fk_Usuario_has_Endereco_Endereco1_idx",
+        using: "BTREE",
+        fields: [
+          { name: "Endereco_idEndereco" },
+        ]
+      },
+      {
+        name: "fk_Usuario_has_Endereco_Usuario1_idx",
         using: "BTREE",
         fields: [
           { name: "Usuario_idUsuario" },

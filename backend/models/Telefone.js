@@ -7,7 +7,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       primaryKey: true
     },
-    numero: {
+    fone: {
       type: DataTypes.STRING(20),
       allowNull: false
     },
